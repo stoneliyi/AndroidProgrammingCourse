@@ -26,6 +26,9 @@ public class TipActivity extends Activity {
 
     public void calTipAmount(View button) {
     	String inputPrice = etAmount.getText().toString();
+    	if ("".equals(inputPrice)) {
+    		return;
+    	}
     	try {
     	   	double tipPct = getTipPct(button);
     		tipAmount = Double.parseDouble(inputPrice) * tipPct;
