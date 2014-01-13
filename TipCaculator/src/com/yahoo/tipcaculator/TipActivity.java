@@ -13,7 +13,9 @@ import android.widget.Toast;
 public class TipActivity extends Activity {
 	private EditText etAmount;
 	private TextView tvTipAmount;
+	private TextView tvTotalAmount;
 	private double tipAmount;
+	private double totalAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class TipActivity extends Activity {
         
         etAmount = (EditText)findViewById(R.id.etAmount);
         tvTipAmount = (TextView)findViewById(R.id.textViewTipAmount);
+        tvTotalAmount = (TextView)findViewById(R.id.textViewTotalAmount);
     }
 
     public void calTipAmount(View button) {
@@ -32,7 +35,10 @@ public class TipActivity extends Activity {
     	try {
     	   	double tipPct = getTipPct(button);
     		tipAmount = Double.parseDouble(inputPrice) * tipPct;
+    		totalAmount = Double.parseDouble(inputPrice) + tipAmount;
     		tvTipAmount.setText(String.valueOf(round(tipAmount, 2)));
+    		tvTotalAmount.setText(String.valueOf(round(totalAmount, 2)));
+    		
     	} catch (NumberFormatException e) {
     		Toast.makeText(getBaseContext(), inputPrice + " is not a number. please re-enter", Toast.LENGTH_LONG).show();
     	} catch (Exception ex) {

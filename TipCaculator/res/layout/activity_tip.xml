@@ -54,16 +54,6 @@
         android:text="@string/pct_20" />
 
     <TextView
-        android:id="@+id/textViewTipText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/buttonTip10"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/buttonTip15"
-        android:text="@string/tip_lable"
-        android:textAlignment="center" />
-
-    <TextView
         android:id="@+id/textViewTipAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,5 +62,31 @@
         android:layout_alignLeft="@+id/buttonTip15"
         android:layout_alignRight="@+id/buttonTip20"
         android:textAlignment="textStart" />
+
+    <TextView
+        android:id="@+id/textViewTotalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonTip10"
+        android:layout_alignParentBottom="true"
+        android:text="@string/totalAmount_lable" />
+
+    <TextView
+        android:id="@+id/textViewTipText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewTotalText"
+        android:layout_alignLeft="@+id/textViewTotalText"
+        android:layout_alignRight="@+id/textViewTotalText"
+        android:text="@string/tip_lable"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textViewTotalAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/textViewTipAmount"
+        android:layout_toRightOf="@+id/textViewTotalText" />
 
 </RelativeLayout>

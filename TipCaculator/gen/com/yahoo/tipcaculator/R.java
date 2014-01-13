@@ -24,13 +24,15 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080006;
+        public static final int action_settings=0x7f080008;
         public static final int buttonTip10=0x7f080002;
         public static final int buttonTip15=0x7f080001;
         public static final int buttonTip20=0x7f080003;
         public static final int etAmount=0x7f080000;
-        public static final int textViewTipAmount=0x7f080005;
-        public static final int textViewTipText=0x7f080004;
+        public static final int textViewTipAmount=0x7f080004;
+        public static final int textViewTipText=0x7f080005;
+        public static final int textViewTotalAmount=0x7f080007;
+        public static final int textViewTotalText=0x7f080006;
     }
     public static final class layout {
         public static final int activity_tip=0x7f030000;
@@ -47,6 +49,7 @@ public final class R {
         public static final int pct_15=0x7f050003;
         public static final int pct_20=0x7f050005;
         public static final int tip_lable=0x7f050006;
+        public static final int totalAmount_lable=0x7f050008;
     }
     public static final class style {
         /** 

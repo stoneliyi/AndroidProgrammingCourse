@@ -9,5 +9,6 @@
     <string name="pct_20">20%</string>
     <string name="tip_lable">Tip is:</string>
     <string name="inputAmountHint_lable">enter the price</string>
+    <string name="totalAmount_lable">&quot;Total is: &quot;</string>
 
 </resources>
