@@ -3,10 +3,13 @@ package com.yahoo.tipcaculator;
 import java.math.BigDecimal;
 
 import android.os.Bundle;
+import android.os.storage.OnObbStateChangeListener;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +17,8 @@ public class TipActivity extends Activity {
 	private EditText etAmount;
 	private TextView tvTipAmount;
 	private TextView tvTotalAmount;
+	private TextView tvSBProgress;
+	private SeekBar sbTipPct;
 	private double tipAmount;
 	private double totalAmount;
 
@@ -25,9 +30,50 @@ public class TipActivity extends Activity {
         etAmount = (EditText)findViewById(R.id.etAmount);
         tvTipAmount = (TextView)findViewById(R.id.textViewTipAmount);
         tvTotalAmount = (TextView)findViewById(R.id.textViewTotalAmount);
+        tvSBProgress = (TextView)findViewById(R.id.textViewSBProgress);
+        sbTipPct = (SeekBar)findViewById(R.id.sbTipPct);
+        sbTipPct.setMax(100);
+        sbTipPct.setProgress(0);
+        setupSBListen();
     }
 
-    public void calTipAmount(View button) {
+    private void setupSBListen() {
+    	sbTipPct.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {			
+				int sbProgress = seekBar.getProgress();
+				//Toast.makeText(getBaseContext(), "current progress: " + sbProgress, Toast.LENGTH_LONG).show();
+				if (sbProgress < 0 || sbProgress > 100) {
+					return;
+				}
+				String inputPrice = etAmount.getText().toString();
+		    	if ("".equals(inputPrice)) {
+		    		return;
+		    	}
+		    	double tipPct = (sbProgress * 1.00) / 100;
+				tipAmount = Double.parseDouble(inputPrice) * tipPct;
+	    		totalAmount = Double.parseDouble(inputPrice) + tipAmount;
+	    		tvTipAmount.setText(String.valueOf(round(tipAmount, 2)));
+	    		tvTotalAmount.setText(String.valueOf(round(totalAmount, 2)));
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				
+				
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				tvSBProgress.setText(progress + "%");
+			}
+		});
+		
+	}
+
+	public void calTipAmount(View button) {
     	String inputPrice = etAmount.getText().toString();
     	if ("".equals(inputPrice)) {
     		return;

@@ -89,4 +89,19 @@
         android:layout_alignRight="@+id/textViewTipAmount"
         android:layout_toRightOf="@+id/textViewTotalText" />
 
+    <TextView
+        android:id="@+id/textViewSBProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonTip15"
+        android:layout_centerHorizontal="true" />
+
+    <SeekBar
+        android:id="@+id/sbTipPct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textViewSBProgress"
+        android:layout_alignLeft="@+id/etAmount"
+        android:max="@integer/ONE_HUNDRED" />
+
 </RelativeLayout>
