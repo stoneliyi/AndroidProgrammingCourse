@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GridImageSearch</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="search_lable">Search</string>
+    <string name="search_hint_lable">Enter image term</string>
+    <string name="title_activity_full_image_view">FullImageViewActivity</string>
+
+</resources>
