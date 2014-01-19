@@ -12,12 +12,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -30,6 +32,7 @@ public class ImageSearchActivity extends Activity {
 	private ImageResultArrayAdapter imageArrayAdapter;
 	
 	private static final String imageSearchAPIBaseUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&start=0&q=";
+	private static final int REQUEST_CODE = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +90,27 @@ public class ImageSearchActivity extends Activity {
 
     	});
 
-
 	}
+	
+    public void onClickAdvancedMenu(MenuItem mi) {
+    	Intent i = new Intent(getApplicationContext(), AdvancedOptionsActivity.class);
+    	startActivityForResult(i, REQUEST_CODE);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+   	     	// Extract name value from result extras
+    		String size = data.getExtras().getString("image_size");
+   	     	String color = data.getExtras().getString("image_color");
+   	     	String type = data.getExtras().getString("image_type");
+   	     	String site = data.getExtras().getString("image_site");
+
+   	     	Log.d("debug", "advanced options: " + size + ", " + color + ", " + type + ", " + site);
+   	     	Toast.makeText(this, "options: " + size + ", " + color + ", " + type + ", " + site, Toast.LENGTH_LONG).show();
+   	  	}
+    	Log.d("debug", "advanced options set, filtering the result");
+    }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

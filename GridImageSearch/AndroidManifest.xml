@@ -28,6 +28,10 @@
             android:name="com.yahoo.gridimagesearch.FullImageViewActivity"
             android:label="@string/title_activity_full_image_view" >
         </activity>
+        <activity
+            android:name="com.yahoo.gridimagesearch.AdvancedOptionsActivity"
+            android:label="@string/title_activity_advanced_options" >
+        </activity>
     </application>
 
 </manifest>

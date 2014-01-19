@@ -7,5 +7,37 @@
     <string name="search_lable">Search</string>
     <string name="search_hint_lable">Enter image term</string>
     <string name="title_activity_full_image_view">FullImageViewActivity</string>
+    <string name="Advanced_lable">Advanced</string>
+    <string name="title_activity_advanced_options">AdvancedOptionsActivity</string>
+    <string name="advanced_options_title_lable">Advanced Search Options</string>
+    <string name="image_size_lable">Image Size</string>
+    <string name="imagesize_menu_prompt">Choose Image Size</string>
+ 
+    <string-array name="image_size_array">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+        <item>extra-large</item>
+    </string-array>
+    
+    <string-array name="color_filter_array">
+        <item>black</item>
+        <item>blue</item>
+        <item>brown</item>
+        <item>gray</item>
+        <item>green</item>
+    </string-array>
+    
+    <string-array name="image_type_array">
+        <item>faces</item>
+        <item>photo</item>
+        <item>clip art</item>
+        <item>line art</item>
+    </string-array>
+        <string name="color_filter_lable">Color Filter</string>
+        <string name="choose_color_filter">Choose Color</string>
+        <string name="image_type_lable">Image Type</string>
+        <string name="site_filter_lable">Site filter</string>
+        <string name="button_set_options_lable">Set</string>
 
 </resources>
