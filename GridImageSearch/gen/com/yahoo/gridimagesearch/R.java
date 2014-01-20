@@ -30,12 +30,13 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000e;
+        public static final int action_settings=0x7f09000f;
+        public static final int btLoadMore=0x7f09000e;
         public static final int btSearchOptions=0x7f090009;
         public static final int etQuery=0x7f09000c;
         public static final int etSiteFilter=0x7f090008;
         public static final int gvResults=0x7f09000d;
-        public static final int miAdvanced=0x7f09000f;
+        public static final int miAdvanced=0x7f090010;
         public static final int searchButton=0x7f09000b;
         public static final int sivFull=0x7f09000a;
         public static final int spColorFilter=0x7f090004;
@@ -70,6 +71,7 @@ public final class R {
         public static final int image_size_lable=0x7f050009;
         public static final int image_type_lable=0x7f05000d;
         public static final int imagesize_menu_prompt=0x7f05000a;
+        public static final int load_more_lable=0x7f050010;
         public static final int search_hint_lable=0x7f050004;
         public static final int search_lable=0x7f050003;
         public static final int site_filter_lable=0x7f05000e;

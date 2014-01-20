@@ -27,18 +27,28 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class ImageSearchActivity extends Activity {
 	private EditText etQuery;
 	private GridView gvResults;
-	private Button btSearch;
+	private Button btLoadMore;
+	private String optionsQuery = "";
+	private int start = 0;
+	protected int nextStart;
+	private int currentPageIndex;
+	private int numberOfPages;
+	
 	private ArrayList<ImageResult> imageResults = new ArrayList<ImageResult>();
 	private ImageResultArrayAdapter imageArrayAdapter;
 	
-	private static final String imageSearchAPIBaseUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&start=0&q=";
+	private static final String imageSearchAPIBaseUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=";
 	private static final int REQUEST_CODE = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_search);
+        
+        Log.d("DEBUG", "method onCreate called!");
         setupViews();
+        
+    	btLoadMore.setVisibility(View.INVISIBLE);
         
         imageArrayAdapter = new ImageResultArrayAdapter(this, imageResults);
         gvResults.setAdapter(imageArrayAdapter);
@@ -52,36 +62,72 @@ public class ImageSearchActivity extends Activity {
 				Intent intent = new Intent(getApplicationContext(), FullImageViewActivity.class);
 				intent.putExtra("imageObj", image);
 				startActivity(intent);
-			}
-        	
+			}  	
 		});
     }
 
     private void setupViews() {
     	etQuery = (EditText) findViewById(R.id.etQuery);
     	gvResults = (GridView) findViewById(R.id.gvResults);
-    	btSearch = (Button) findViewById(R.id.searchButton);    			
+    	btLoadMore = (Button) findViewById(R.id.btLoadMore);
 	}
 
 
 	public void onClickImageSearch(View button) {
-    	String query = etQuery.getText().toString();
-    	final String apiUrl = imageSearchAPIBaseUrl + Uri.encode(query);
-    	//Toast.makeText(getApplicationContext(), "search term: " + apiUrl, Toast.LENGTH_LONG).show();
+		resetPagination();
+    	queryAPIForResults(etQuery.getText().toString(), start, this.optionsQuery);
+	}
+
+	private void resetPagination() {
+		start = 0;
+		nextStart = 0;
+		currentPageIndex = 0;
+		numberOfPages = 0;
+	}
+	
+	public void onClickLoadMore(View btLoadMore) {
+		//Toast.makeText(getApplicationContext(), "loading more images...", Toast.LENGTH_SHORT).show();
+		queryAPIForResults(etQuery.getText().toString(), nextStart, this.optionsQuery);
+
+	}
+
+	private void queryAPIForResults(String query, int start, String optionsQuery) {
+    	final String apiUrl = imageSearchAPIBaseUrl + Uri.encode(query) + "&start=" + start + "&" + optionsQuery;
     	
     	AsyncHttpClient client = new AsyncHttpClient();
-    	Log.d("DEBUG", "making a api call");
+    	Log.d("DEBUG", "making a api call to url: " + apiUrl);
     	client.get(apiUrl, new JsonHttpResponseHandler() {
 			@Override
 			public void onSuccess(JSONObject response) {
 				JSONArray imageJsonResults = null;
+				JSONObject resultCursor = null;
+				
+				try {				
+					resultCursor = response.getJSONObject("responseData").getJSONObject("cursor");
+					currentPageIndex = resultCursor.getInt("currentPageIndex");
+					JSONArray pages = resultCursor.getJSONArray("pages");
+					numberOfPages = pages.length();
+					Log.d("DEBUG", "number of pages: " + numberOfPages + ", current index: " + currentPageIndex);
+					if (currentPageIndex < numberOfPages - 1) {
+						nextStart = pages.getJSONObject(currentPageIndex + 1).getInt("start");
+						Log.d("DEBUG", "next start: " + nextStart);
+						Log.d("DEBUG", "setting load more button visibility to: " + View.VISIBLE);
+			    		btLoadMore.setVisibility(View.VISIBLE);
+					} else {
+						Log.d("DEBUG", "setting load more button visibility to: " + View.INVISIBLE);
+			    		btLoadMore.setVisibility(View.INVISIBLE);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
 				try {
 					imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
 					imageResults.clear();
 					imageArrayAdapter.addAll(ImageResult.imageResultListFromJsonArray(imageJsonResults));
 					// will throw exception
 					// imageArrayAdapter.notify();
-					Log.d("debug", imageResults.toString());
+					Log.d("DEBUG", imageResults.toString());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -89,7 +135,6 @@ public class ImageSearchActivity extends Activity {
 			}
 
     	});
-
 	}
 	
     public void onClickAdvancedMenu(MenuItem mi) {
@@ -100,16 +145,19 @@ public class ImageSearchActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-   	     	// Extract name value from result extras
-    		String size = data.getExtras().getString("image_size");
-   	     	String color = data.getExtras().getString("image_color");
-   	     	String type = data.getExtras().getString("image_type");
-   	     	String site = data.getExtras().getString("image_site");
-
-   	     	Log.d("debug", "advanced options: " + size + ", " + color + ", " + type + ", " + site);
-   	     	Toast.makeText(this, "options: " + size + ", " + color + ", " + type + ", " + site, Toast.LENGTH_LONG).show();
+    		Log.d("DEBUG", "advanced options set, filtering the result");
+    		this.optionsQuery =  getOptionsQuery(data);
+    		queryAPIForResults(etQuery.getText().toString(), this.start, this.optionsQuery);
    	  	}
-    	Log.d("debug", "advanced options set, filtering the result");
+    }
+    
+    private String getOptionsQuery(Intent data) {
+    		String size = Uri.encode(data.getExtras().getString("image_size"));
+	     	String color = Uri.encode(data.getExtras().getString("image_color"));
+	     	String type = Uri.encode(data.getExtras().getString("image_type"));
+	     	String site = Uri.encode(data.getExtras().getString("image_site"));
+	 
+	    return "imgsz=" + size + "&imgcolor=" + color + "&imgtype=" + type + "&as_sitesearch=" + site;
     }
     
     @Override

@@ -31,9 +31,20 @@
         android:id="@+id/gvResults"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/btLoadMore"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/etQuery"
         android:numColumns="3" >
+
     </GridView>
+
+    <Button
+        android:id="@+id/btLoadMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="onClickLoadMore"
+        android:text="@string/load_more_lable" />
 
 </RelativeLayout>
