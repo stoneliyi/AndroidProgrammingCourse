@@ -38,6 +38,7 @@ public class ImageSearchActivity extends Activity {
 	private ImageResultArrayAdapter imageArrayAdapter;
 	
 	private static final String imageSearchAPIBaseUrl = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=";
+	private static int pageSize = 8;
 	private static final int REQUEST_CODE = 10000;
 
     @Override
@@ -64,6 +65,14 @@ public class ImageSearchActivity extends Activity {
 				startActivity(intent);
 			}  	
 		});
+        
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+			
+			@Override
+			public void onLoadMore(int page, int totalItemsCount) {
+				queryAPIForResults(etQuery.getText().toString(), page * pageSize, optionsQuery, false);				
+			}
+		});
     }
 
     private void setupViews() {
@@ -75,7 +84,8 @@ public class ImageSearchActivity extends Activity {
 
 	public void onClickImageSearch(View button) {
 		resetPagination();
-    	queryAPIForResults(etQuery.getText().toString(), start, this.optionsQuery);
+		imageResults.clear();
+    	queryAPIForResults(etQuery.getText().toString(), start, this.optionsQuery, true);
 	}
 
 	private void resetPagination() {
@@ -87,11 +97,11 @@ public class ImageSearchActivity extends Activity {
 	
 	public void onClickLoadMore(View btLoadMore) {
 		//Toast.makeText(getApplicationContext(), "loading more images...", Toast.LENGTH_SHORT).show();
-		queryAPIForResults(etQuery.getText().toString(), nextStart, this.optionsQuery);
+		queryAPIForResults(etQuery.getText().toString(), nextStart, this.optionsQuery, true);
 
 	}
 
-	private void queryAPIForResults(String query, int start, String optionsQuery) {
+	private void queryAPIForResults(String query, int start, String optionsQuery, final boolean clearResult) {
     	final String apiUrl = imageSearchAPIBaseUrl + Uri.encode(query) + "&start=" + start + "&" + optionsQuery;
     	
     	AsyncHttpClient client = new AsyncHttpClient();
@@ -112,7 +122,8 @@ public class ImageSearchActivity extends Activity {
 						nextStart = pages.getJSONObject(currentPageIndex + 1).getInt("start");
 						Log.d("DEBUG", "next start: " + nextStart);
 						Log.d("DEBUG", "setting load more button visibility to: " + View.VISIBLE);
-			    		btLoadMore.setVisibility(View.VISIBLE);
+			    		//btLoadMore.setVisibility(View.VISIBLE);
+						btLoadMore.setVisibility(View.INVISIBLE);
 					} else {
 						Log.d("DEBUG", "setting load more button visibility to: " + View.INVISIBLE);
 			    		btLoadMore.setVisibility(View.INVISIBLE);
@@ -123,11 +134,13 @@ public class ImageSearchActivity extends Activity {
 				
 				try {
 					imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
-					imageResults.clear();
+					if (clearResult) {
+						imageResults.clear();
+					}
 					imageArrayAdapter.addAll(ImageResult.imageResultListFromJsonArray(imageJsonResults));
 					// will throw exception
 					// imageArrayAdapter.notify();
-					Log.d("DEBUG", imageResults.toString());
+					//Log.d("DEBUG", imageResults.toString());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -147,7 +160,7 @@ public class ImageSearchActivity extends Activity {
     	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
     		Log.d("DEBUG", "advanced options set, filtering the result");
     		this.optionsQuery =  getOptionsQuery(data);
-    		queryAPIForResults(etQuery.getText().toString(), this.start, this.optionsQuery);
+    		queryAPIForResults(etQuery.getText().toString(), this.start, this.optionsQuery, true);
    	  	}
     }
     
