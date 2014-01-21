@@ -54,8 +54,9 @@ public abstract class EndlessScrollListener implements OnScrollListener {
 		// changed, if so we conclude it has finished loading and update the current page
 		// number and total item count.
 		if (loading) {
-			Log.d("DEBUG", "loading...");
+			Log.d("DEBUG", "loading..., totalItemCount=" + totalItemCount + " previousTotalItemCount=" + previousTotalItemCount);
 			if (totalItemCount > previousTotalItemCount) {
+				Log.d("DEBUG", "finished loading, update load flag and current page");
 				loading = false;
 				previousTotalItemCount = totalItemCount;
 				currentPage++;
@@ -80,10 +81,10 @@ public abstract class EndlessScrollListener implements OnScrollListener {
 		// Don't take any action on changed
 	}
 	
-//	public void reset() {
-//		currentPage = 0;
-//		 previousTotalItemCount = 0;
-//		loading = true;
-//		startingPageIndex = 0;
-//	}
+	public void reset() {
+		currentPage = 0;
+		previousTotalItemCount = 0;
+		loading = true;
+		startingPageIndex = 0;
+	}
 }

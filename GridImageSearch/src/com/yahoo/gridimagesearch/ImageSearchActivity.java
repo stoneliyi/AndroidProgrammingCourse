@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -28,6 +29,7 @@ public class ImageSearchActivity extends Activity {
 	private EditText etQuery;
 	private GridView gvResults;
 	private Button btLoadMore;
+	private ImageSearchScrollListener scrollListener;
 	private String optionsQuery = "";
 	private int start = 0;
 	protected int nextStart;
@@ -65,14 +67,16 @@ public class ImageSearchActivity extends Activity {
 				startActivity(intent);
 			}  	
 		});
-        
-        gvResults.setOnScrollListener(new EndlessScrollListener() {
-			
-			@Override
-			public void onLoadMore(int page, int totalItemsCount) {
-				queryAPIForResults(etQuery.getText().toString(), page * pageSize, optionsQuery, false);				
-			}
-		});
+        scrollListener = new ImageSearchScrollListener();
+        gvResults.setOnScrollListener(scrollListener);
+    }
+    
+    class ImageSearchScrollListener extends EndlessScrollListener {   	
+    	@Override
+		public void onLoadMore(int page, int totalItemsCount) {
+			Log.d("DEBUG", "scroll listener calling api for results");
+			queryAPIForResults(etQuery.getText().toString(), page * pageSize, optionsQuery, false);				
+		}
     }
 
     private void setupViews() {
@@ -84,7 +88,11 @@ public class ImageSearchActivity extends Activity {
 
 	public void onClickImageSearch(View button) {
 		resetPagination();
+		if (scrollListener != null) {
+			scrollListener.reset();
+		}
 		imageResults.clear();
+		Log.d("DEBUG", "imageResults length=" + imageResults.size());
     	queryAPIForResults(etQuery.getText().toString(), start, this.optionsQuery, true);
 	}
 
