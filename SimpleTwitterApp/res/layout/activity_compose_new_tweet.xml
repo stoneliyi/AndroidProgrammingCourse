@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ComposeNewTweetActivity" >
+
+    <Button
+        android:id="@+id/btCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onClickCancel"
+        android:text="@string/cancel_lable" />
+
+    <Button
+        android:id="@+id/btTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btCancel"
+        android:layout_alignBottom="@+id/btCancel"
+        android:layout_alignParentRight="true"
+         android:onClick="onClickTweet"
+        android:text="@string/submit_new_tweet_lable" />
+    
+    <ImageView
+        android:id="@+id/ivMyProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btCancel"
+        android:src="@drawable/ic_launcher" />
+
+
+    <TextView
+        android:id="@+id/tvMyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivMyProfile"
+        android:layout_toRightOf="@+id/btCancel"
+        android:text="screen_name"
+        android:textSize="12sp" />
+    
+    
+    <EditText
+        android:id="@+id/etNewTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivMyProfile"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:ems="10"
+        android:lines="5"
+        android:gravity="top"
+        android:inputType="textMultiLine" >
+    </EditText>
+
+</RelativeLayout>
