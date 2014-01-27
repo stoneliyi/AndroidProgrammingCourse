@@ -11,5 +11,6 @@
     <string name="title_activity_compose_new_tweet">ComposeNewTweetActivity</string>
     <string name="cancel_lable">Cancel</string>
     <string name="submit_new_tweet_lable">Tweet</string>
+    <string name="refresh_lable">Refresh</string>
 
 </resources>

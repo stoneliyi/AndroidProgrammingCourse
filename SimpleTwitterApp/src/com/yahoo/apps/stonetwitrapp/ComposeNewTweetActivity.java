@@ -5,9 +5,12 @@ import java.net.URLEncoder;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ public class ComposeNewTweetActivity extends Activity {
 	private TextView tvMyName;
 	private ImageView ivMyProfile;
 	private EditText etNewTweet;
+	private Button btTweet;
 	private User me;
 
 	@Override
@@ -30,6 +34,8 @@ public class ComposeNewTweetActivity extends Activity {
 		tvMyName = (TextView)findViewById(R.id.tvMyName);
 		ivMyProfile = (ImageView)findViewById(R.id.ivMyProfile);
 		etNewTweet = (EditText)findViewById(R.id.etNewTweet);
+		btTweet = (Button)findViewById(R.id.btTweet);
+		btTweet.getBackground().setColorFilter(new LightingColorFilter(Color.BLUE, Color.BLUE));
 		
 		tvMyName.setText(me.getName() + " @" + me.getScreenName());
 		ImageLoader.getInstance().displayImage(me.getProfileImageUrl(), ivMyProfile);	

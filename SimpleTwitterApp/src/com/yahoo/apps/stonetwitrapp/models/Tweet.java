@@ -4,15 +4,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.util.ArrayList;
 
-public class Tweet {
-	private String body;
-	private long uid;
+@Table(name = "Tweet")
+public class Tweet extends Model {
+	@Column(name = "Body")
+	public String body;
+	
+	@Column(name = "User")
+    public User user;
+	
+	private long tweetId;
 	private boolean favorited;
 	private boolean retweeted;
-    private User user;
+	
 
+	public Tweet() {
+		super();
+	}
+	
     public User getUser() {
         return user;
     }
@@ -21,8 +35,8 @@ public class Tweet {
         return body;
     }
 
-    public long getId() {
-        return uid;
+    public long getTweetId() {
+        return tweetId;
     }
 
     public boolean isFavorited() {
@@ -37,7 +51,7 @@ public class Tweet {
         Tweet tweet = new Tweet();
         try {
         	tweet.body = jsonObject.getString("text");
-        	tweet.uid = jsonObject.getLong("id");
+        	tweet.tweetId = jsonObject.getLong("id");
         	tweet.favorited = jsonObject.getBoolean("favorited");
         	tweet.retweeted = jsonObject.getBoolean("retweeted");
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
@@ -45,6 +59,7 @@ public class Tweet {
             e.printStackTrace();
             return null;
         }
+        
         return tweet;
     }
 

@@ -11,17 +11,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:onClick="onClickCancel"
+        style="?android:attr/buttonStyleSmall"
         android:text="@string/cancel_lable" />
 
     <Button
         android:id="@+id/btTweet"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btCancel"
         android:layout_alignBottom="@+id/btCancel"
         android:layout_alignParentRight="true"
-         android:onClick="onClickTweet"
-        android:text="@string/submit_new_tweet_lable" />
+        android:layout_alignTop="@id/btCancel"
+        android:onClick="onClickTweet"
+        android:text="@string/submit_new_tweet_lable"
+        
+        android:textColor="@color/white" />
     
     <ImageView
         android:id="@+id/ivMyProfile"
@@ -53,5 +58,7 @@
         android:gravity="top"
         android:inputType="textMultiLine" >
     </EditText>
+
+
 
 </RelativeLayout>
