@@ -1,4 +1,4 @@
-package com.yahoo.app.stonetwitrapp.network;
+package com.yahoo.apps.stonetwitrapp.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

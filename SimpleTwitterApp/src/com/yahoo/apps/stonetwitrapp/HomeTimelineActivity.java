@@ -16,10 +16,10 @@ import android.widget.ListView;
 //import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.yahoo.app.stonetwitrapp.network.Connectivity;
 import com.yahoo.apps.stonetwitrapp.db.Utils;
 import com.yahoo.apps.stonetwitrapp.models.Tweet;
 import com.yahoo.apps.stonetwitrapp.models.User;
+import com.yahoo.apps.stonetwitrapp.network.Connectivity;
 
 public class HomeTimelineActivity extends Activity {
 	private static final int REQUEST_CODE = 10000;
