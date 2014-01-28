@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.os.Bundle;
@@ -17,28 +18,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yahoo.apps.stonetwitrapp.models.User;
+import com.yahoo.apps.stonetwitrapp.network.Connectivity;
 
 public class ComposeNewTweetActivity extends Activity {
 	private TextView tvMyName;
 	private ImageView ivMyProfile;
 	private EditText etNewTweet;
 	private Button btTweet;
-	private User me;
+	//private User me;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compose_new_tweet);
-		me = (User) getIntent().getSerializableExtra("loggedInUser");
+
 		tvMyName = (TextView)findViewById(R.id.tvMyName);
 		ivMyProfile = (ImageView)findViewById(R.id.ivMyProfile);
 		etNewTweet = (EditText)findViewById(R.id.etNewTweet);
 		btTweet = (Button)findViewById(R.id.btTweet);
 		btTweet.getBackground().setColorFilter(new LightingColorFilter(Color.BLUE, Color.BLUE));
 		
-		tvMyName.setText(me.getName() + " @" + me.getScreenName());
-		ImageLoader.getInstance().displayImage(me.getProfileImageUrl(), ivMyProfile);	
+		SharedPreferences pref = getSharedPreferences("MyPrefGroup", MODE_PRIVATE);
+		String username = pref.getString("username", "");
+		String screen_name = pref.getString("screen_name", "");
+		tvMyName.setText(username + " @" + screen_name);
+		if (Connectivity.getInstance(this).isOnline()) {
+			ImageLoader.getInstance().displayImage(pref.getString("profile_image_url", ""), ivMyProfile);
+		}
 	}
 	
 	public void onClickTweet(View btTweet) {
@@ -47,11 +53,13 @@ public class ComposeNewTweetActivity extends Activity {
 			Toast.makeText(getApplicationContext(), "oops, please write something to tweet", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		try {
-			MyTwitterApp.getRestClient().postNewTweet(URLEncoder.encode(tweetText, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		
+		MyTwitterApp.getRestClient().postNewTweet(tweetText);
+//		try {
+//			MyTwitterApp.getRestClient().postNewTweet(URLEncoder.encode(tweetText, "UTF-8"));			
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
 
 		Intent data = new Intent();
 		data.putExtra("operation", "tweet" );

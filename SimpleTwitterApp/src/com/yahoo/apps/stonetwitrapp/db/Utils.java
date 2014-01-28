@@ -21,9 +21,9 @@ public class Utils {
 	public static void saveTweetsToDB(List<Tweet> tweets, int limit) {
 		cleanAllFromDB();
 		for (Tweet tweet : tweets) {
-			Log.d("DEBUG", "saving user to DB: " + tweet.getUser().getName());
+			//Log.d("DEBUG", "saving user to DB: " + tweet.getUser().getName());
 			tweet.getUser().save();
-			Log.d("DEBUG", "saving tweet to DB: " + tweet.getBody());
+			//Log.d("DEBUG", "saving tweet to DB: " + tweet.getBody());
 			tweet.save();
 		}
 	}

@@ -8,12 +8,13 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-//import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.apps.stonetwitrapp.db.Utils;
@@ -23,8 +24,6 @@ import com.yahoo.apps.stonetwitrapp.network.Connectivity;
 
 public class HomeTimelineActivity extends Activity {
 	private static final int REQUEST_CODE = 10000;
-	
-	//TODO: store loggedInUser in local DB
 	private User loggedInUser;
 
 	@Override
@@ -33,12 +32,19 @@ public class HomeTimelineActivity extends Activity {
 		setContentView(R.layout.activity_home_timeline);
 		
 		if (Connectivity.getInstance(this).isOnline()) {
-			MyTwitterApp.getRestClient().getLogedInSUser(new JsonHttpResponseHandler() {
+			MyTwitterApp.getRestClient().getLogedInUser(new JsonHttpResponseHandler() {
 
 				@Override
 				public void onSuccess(JSONObject jsonUser) {
 					loggedInUser = User.fromJson(jsonUser);
 					Log.d("DEBUG", "user name: " + loggedInUser.getName() + " screen name: " + loggedInUser.getScreenName());
+					SharedPreferences pref = getSharedPreferences("MyPrefGroup", MODE_PRIVATE);
+					Editor edit = pref.edit();
+					edit.putString("username", loggedInUser.getName());
+					edit.putString("screen_name", loggedInUser.getScreenName());
+					edit.putString("profile_image_url", loggedInUser.getProfileImageUrl());
+					edit.commit();
+					Log.d("DEBUG", "saved the logegedIn user info to preferences");
 				}
 
 			});
@@ -76,30 +82,16 @@ public class HomeTimelineActivity extends Activity {
 
 			}
 
-			@Override
-			public void onFailure(Throwable error, JSONObject jsonResponse) {
-				Log.d("DEBUG", "onFailure with JsonObj");
-				Log.d("DEBUG", error.toString());
-				Log.d("DEBUG", jsonResponse.toString());
-			}
 
 			@Override
 			protected void handleFailureMessage(Throwable arg0, String arg1) {
 				Log.d("DEBUG", "handleFailureMessage");
 			}
-
-			@Override
-			public void onFailure(Throwable arg0, JSONArray arg1) {
-				Log.d("DEBUG", "onFailure with JsonArray");
-			}			
-			
 		});
 	}
 	
 	public void onClickComposeMenu(MenuItem miCompose) {
-		//Toast.makeText(getApplicationContext(), "composing a new tweet", Toast.LENGTH_SHORT).show();
     	Intent i = new Intent(HomeTimelineActivity.this, ComposeNewTweetActivity.class);
-    	i.putExtra("loggedInUser", loggedInUser);
     	startActivityForResult(i, REQUEST_CODE);
 	}
 	

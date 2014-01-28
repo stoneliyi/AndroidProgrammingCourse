@@ -9,7 +9,7 @@ public class Connectivity {
 	private static Connectivity instance = new Connectivity();
 	static Context context;
 	ConnectivityManager connectivityManager;
-	NetworkInfo wifiInfo, mobileInfo;
+	//	NetworkInfo wifiInfo, mobileInfo;
 	boolean connected = false;
 
 	public static Connectivity getInstance(Context ctx) {
@@ -25,6 +25,9 @@ public class Connectivity {
 			NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 			connected = networkInfo != null && networkInfo.isAvailable() &&
 					networkInfo.isConnected();
+			Log.d("DEBUG", "networkInfo: " + networkInfo.toString());
+			Log.d("DEBUG", "network availability: " + networkInfo.isAvailable());
+			Log.d("DEBUG", "network connectivity: " + networkInfo.isConnected());
 
 		} catch (Exception e) {
 			System.out.println("CheckConnectivity Exception: " + e.getMessage());
