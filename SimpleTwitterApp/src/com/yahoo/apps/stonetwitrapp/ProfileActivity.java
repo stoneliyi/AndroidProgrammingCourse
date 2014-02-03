@@ -1,24 +1,23 @@
 package com.yahoo.apps.stonetwitrapp;
 
-import com.yahoo.apps.stonetwitrapp.fragments.UserInfoFragment;
-import com.yahoo.apps.stonetwitrapp.fragments.UserTimelineFragment;
-
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 
-public class ProfileActivity extends FragmentActivity {
+import com.yahoo.apps.stonetwitrapp.fragments.TweetsListFragment;
+import com.yahoo.apps.stonetwitrapp.fragments.UserInfoFragment;
+import com.yahoo.apps.stonetwitrapp.fragments.UserTimelineFragment;
+
+public class ProfileActivity extends FragmentActivity implements TweetsListFragment.OnItemSelectedListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 		
-		SharedPreferences pref = getSharedPreferences("MyPrefGroup", MODE_PRIVATE);
-		String userId = pref.getString("userId", "");
+		String userId = getIntent().getStringExtra("userId");
 		Log.d("DEBUG", "userId: " + userId);
 		if ("".equals(userId)) {
 			Log.d("DEBUG", "no userId retrieved, return");
@@ -38,6 +37,11 @@ public class ProfileActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.profile, menu);
 		return true;
+	}
+
+	@Override
+	public void onProfileImageSelected(String userId) {
+		Log.d("DEBUG", "profile Image Selected");
 	}
 
 }

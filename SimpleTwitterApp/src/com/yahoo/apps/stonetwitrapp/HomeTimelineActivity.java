@@ -29,9 +29,11 @@ import com.yahoo.apps.stonetwitrapp.models.Tweet;
 import com.yahoo.apps.stonetwitrapp.models.User;
 import com.yahoo.apps.stonetwitrapp.network.Connectivity;
 
-public class HomeTimelineActivity extends FragmentActivity implements TabListener {
+public class HomeTimelineActivity extends FragmentActivity implements TabListener, 
+														TweetsListFragment.OnItemSelectedListener {
 	private static final int REQUEST_CODE_COMPOSE = 10000;
 	private static final int REQUEST_CODE_PROFILE = 10001;
+
 	private User loggedInUser;
 	TweetsListFragment tweetsFragment;
 
@@ -109,6 +111,9 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 	
 	public void onClickProfile(MenuItem miProfile) {
 		Intent i = new Intent(HomeTimelineActivity.this, ProfileActivity.class);
+		SharedPreferences pref = getSharedPreferences("MyPrefGroup", MODE_PRIVATE);
+		String userId = pref.getString("userId", "");
+		i.putExtra("userId", userId);
     	startActivityForResult(i, REQUEST_CODE_PROFILE);	
 	}
 	
@@ -150,6 +155,13 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 	@Override
 	public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
 		
+	}
+
+	@Override
+	public void onProfileImageSelected(String userId) {
+		Intent i = new Intent(HomeTimelineActivity.this, ProfileActivity.class);
+		i.putExtra("userId", userId);
+    	startActivityForResult(i, REQUEST_CODE_PROFILE);	
 	}
 
 
