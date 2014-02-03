@@ -12,5 +12,7 @@
     <string name="cancel_lable">Cancel</string>
     <string name="submit_new_tweet_lable">Tweet</string>
     <string name="refresh_lable">Refresh</string>
+    <string name="profile_lable">Profile</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

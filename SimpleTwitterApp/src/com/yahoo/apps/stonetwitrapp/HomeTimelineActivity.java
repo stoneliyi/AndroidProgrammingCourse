@@ -1,16 +1,20 @@
 package com.yahoo.apps.stonetwitrapp;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,18 +22,24 @@ import android.widget.ListView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.yahoo.apps.stonetwitrapp.db.Utils;
+import com.yahoo.apps.stonetwitrapp.fragments.HomeTimelineFragment;
+import com.yahoo.apps.stonetwitrapp.fragments.MentionsFragment;
+import com.yahoo.apps.stonetwitrapp.fragments.TweetsListFragment;
 import com.yahoo.apps.stonetwitrapp.models.Tweet;
 import com.yahoo.apps.stonetwitrapp.models.User;
 import com.yahoo.apps.stonetwitrapp.network.Connectivity;
 
-public class HomeTimelineActivity extends Activity {
+public class HomeTimelineActivity extends FragmentActivity implements TabListener {
 	private static final int REQUEST_CODE = 10000;
 	private User loggedInUser;
+	TweetsListFragment tweetsFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_timeline);
+		
+		setUpNavigationTabs();
 		
 		if (Connectivity.getInstance(this).isOnline()) {
 			MyTwitterApp.getRestClient().getLogedInUser(new JsonHttpResponseHandler() {
@@ -48,13 +58,28 @@ public class HomeTimelineActivity extends Activity {
 				}
 
 			});
-			refreshHomeTimeLine();
 		} else {
 			offlineTimeLine();
 		}
 		
 	}
 	
+	private void setUpNavigationTabs() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.setDisplayShowTitleEnabled(true);
+		Tab tabHome = actionBar.newTab().setText("Home").setTag("HomeTimelineFragment")
+				.setTabListener(this);
+		
+		Tab tabMentions = actionBar.newTab().setText("Mentions").setTag("MentionsTimelineFragment")
+				.setTabListener(this);
+		
+		actionBar.addTab(tabHome);
+		actionBar.addTab(tabMentions);
+		actionBar.selectTab(tabHome);
+		
+	}
+
 	private void offlineTimeLine() {
 		Log.d("DEBUG", "no network, refresh home timeline offline");
 		
@@ -68,41 +93,26 @@ public class HomeTimelineActivity extends Activity {
 		}
 	}
 
-	private void refreshHomeTimeLine() {
-		MyTwitterApp.getRestClient().getHomeTimeLine(new JsonHttpResponseHandler() {
-
-			@Override
-			public void onSuccess(JSONArray jsonTweets) {
-				Log.d("DEBUG", "refresh home timeline successfully");
-				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-				ListView lvTweets = (ListView)findViewById(R.id.lvTweets);
-				TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);			
-				lvTweets.setAdapter(adapter);
-				Utils.saveTweetsToDB(tweets, 100);
-
-			}
-
-
-			@Override
-			protected void handleFailureMessage(Throwable arg0, String arg1) {
-				Log.d("DEBUG", "handleFailureMessage");
-			}
-		});
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.home_timeline, menu);
+	    return true;
 	}
-	
+
+
 	public void onClickComposeMenu(MenuItem miCompose) {
     	Intent i = new Intent(HomeTimelineActivity.this, ComposeNewTweetActivity.class);
     	startActivityForResult(i, REQUEST_CODE);
 	}
 	
-	public void onClickRefresh(MenuItem miRefresh) {
-		if (Connectivity.getInstance(this).isOnline()) {
-			refreshHomeTimeLine();
-		} else {
-			offlineTimeLine();
-		}
+	public void onClickProfile(MenuItem miProfile) {
+		
 	}
 	
+	private void refreshHomeTimeLine() {
+		
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data /* return Intent from another activity */) {
     	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
     	     // Extract name value from result extras
@@ -116,10 +126,28 @@ public class HomeTimelineActivity extends Activity {
      }
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home_timeline, menu);
-		return true;
+	public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
+		
 	}
+
+	@Override
+	public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
+		FragmentManager fmMgr = getSupportFragmentManager();
+		android.support.v4.app.FragmentTransaction fts = fmMgr.beginTransaction();
+		
+		if (tab.getTag().equals("HomeTimelineFragment")) {
+			fts.replace(R.id.flContainer, new HomeTimelineFragment());
+		} else {
+			fts.replace(R.id.flContainer, new MentionsFragment());
+		}
+		fts.commit();
+		
+	}
+
+	@Override
+	public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
+		
+	}
+
 
 }

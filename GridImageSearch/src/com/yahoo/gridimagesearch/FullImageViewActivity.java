@@ -1,9 +1,8 @@
 package com.yahoo.gridimagesearch;
 
 import java.io.InputStream;
-import java.net.URI;
 
-import com.loopj.android.image.SmartImageView;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,10 +22,12 @@ public class FullImageViewActivity extends Activity {
 		setContentView(R.layout.activity_full_image_view);
 		Intent receivedIntent = getIntent();
 		ImageResult image = (ImageResult) receivedIntent.getSerializableExtra("imageObj");
-		SmartImageView sivImage = (SmartImageView) findViewById(R.id.sivFull);
-		sivImage.setImageUrl(image.getFullUrl());
-		//ImageView sivImage = (ImageView) findViewById(R.id.sivFull);
-		//new DownloadImageTask(sivImage).execute(image.getFullUrl());
+//		SmartImageView sivImage = (SmartImageView) findViewById(R.id.sivFull);
+//		sivImage.setImageUrl(image.getFullUrl());
+//		new DownloadImageTask(sivImage).execute(image.getFullUrl());
+		
+		ImageView sivImage = (ImageView) findViewById(R.id.sivFull);
+		Picasso.with(getApplicationContext()).load(image.getFullUrl()).into(sivImage);
 		
 	}
 
@@ -37,6 +38,7 @@ public class FullImageViewActivity extends Activity {
 		return true;
 	}
 
+	@SuppressWarnings("unused")
 	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 	    ImageView bmImage;
 

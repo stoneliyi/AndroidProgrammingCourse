@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -35,8 +36,6 @@ public class TwitterClient extends OAuthBaseClient {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
     
-    // CHANGE THIS
-    // DEFINE METHODS for different API endpoints here
     public void getHomeTimeLine(AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("/statuses/home_timeline.json");
         // Can specify query string params directly or through RequestParams.
@@ -44,15 +43,7 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("count", "25");
         client.get(apiUrl, params, handler);
     }
-    
-    /* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-     * 	  i.e getApiUrl("statuses/home_timeline.json");
-     * 2. Define the parameters to pass to the request (query or body)
-     *    i.e RequestParams params = new RequestParams("foo", "bar");
-     * 3. Define the request method and make a call to the client
-     *    i.e client.get(apiUrl, params, handler);
-     *    i.e client.post(apiUrl, params, handler);
-     */
+
     
    public void getLogedInUser(AsyncHttpResponseHandler handler) {
 	   // https://api.twitter.com/1.1/account/verify_credentials.json
@@ -67,5 +58,10 @@ public class TwitterClient extends OAuthBaseClient {
        params.put("status", tweetText);
 	   client.post(apiUrl, params, null);
    }
+
+	public void getMentionsTimeLine(JsonHttpResponseHandler jsonHttpResponseHandler) {
+		String apiUrl = getApiUrl("/statuses/mentions_timeline.json");
+		client.get(apiUrl, null, jsonHttpResponseHandler);		
+	}
    
 }
