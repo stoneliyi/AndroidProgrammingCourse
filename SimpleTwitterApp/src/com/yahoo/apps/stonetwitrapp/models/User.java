@@ -23,11 +23,14 @@ public class User extends Model implements Serializable {
 	public String screenName;
 	
 	private long userId;
+	private String userId_str;
 	private String profileBgImageUrl;
 	private int numTweets;
 	private int followersCount;
 	private int friendsCount;
 	private String profileImageUrl;
+	private String description;
+
 	
 	public User() {
 		super();
@@ -62,12 +65,14 @@ public class User extends Model implements Serializable {
         try {
         	u.name = json.getString("name");
         	u.userId = json.getLong("id");
+        	u.userId_str = json.getString("id_str");
         	u.screenName = json.getString("screen_name");
         	u.profileBgImageUrl = json.getString("profile_background_image_url");
         	u.profileImageUrl = json.getString("profile_image_url");
         	u.numTweets = json.getInt("statuses_count");
         	u.followersCount = json.getInt("followers_count");
         	u.friendsCount = json.getInt("friends_count");
+        	u.description = json.getString("description");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -81,4 +86,13 @@ public class User extends Model implements Serializable {
 	public long getUserId() {
 		return userId;
 	}
+	
+	public String getUserIdStr() {
+		return userId_str;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
 }

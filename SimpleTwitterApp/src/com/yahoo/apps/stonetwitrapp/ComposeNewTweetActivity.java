@@ -1,8 +1,5 @@
 package com.yahoo.apps.stonetwitrapp;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,11 +52,7 @@ public class ComposeNewTweetActivity extends Activity {
 		}
 		
 		MyTwitterApp.getRestClient().postNewTweet(tweetText);
-//		try {
-//			MyTwitterApp.getRestClient().postNewTweet(URLEncoder.encode(tweetText, "UTF-8"));			
-//		} catch (UnsupportedEncodingException e) {
-//			e.printStackTrace();
-//		}
+
 
 		Intent data = new Intent();
 		data.putExtra("operation", "tweet" );

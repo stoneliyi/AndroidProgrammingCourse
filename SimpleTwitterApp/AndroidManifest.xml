@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="12"
         android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -51,6 +51,10 @@
         <activity
             android:name="com.yahoo.apps.stonetwitrapp.ComposeNewTweetActivity"
             android:label="@string/title_activity_compose_new_tweet" >
+        </activity>
+        <activity
+            android:name="com.yahoo.apps.stonetwitrapp.ProfileActivity"
+            android:label="@string/title_activity_profile" >
         </activity>
     </application>
 

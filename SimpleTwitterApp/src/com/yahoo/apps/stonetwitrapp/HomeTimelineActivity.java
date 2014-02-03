@@ -30,7 +30,8 @@ import com.yahoo.apps.stonetwitrapp.models.User;
 import com.yahoo.apps.stonetwitrapp.network.Connectivity;
 
 public class HomeTimelineActivity extends FragmentActivity implements TabListener {
-	private static final int REQUEST_CODE = 10000;
+	private static final int REQUEST_CODE_COMPOSE = 10000;
+	private static final int REQUEST_CODE_PROFILE = 10001;
 	private User loggedInUser;
 	TweetsListFragment tweetsFragment;
 
@@ -50,6 +51,7 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 					Log.d("DEBUG", "user name: " + loggedInUser.getName() + " screen name: " + loggedInUser.getScreenName());
 					SharedPreferences pref = getSharedPreferences("MyPrefGroup", MODE_PRIVATE);
 					Editor edit = pref.edit();
+					edit.putString("userId", loggedInUser.getUserIdStr());
 					edit.putString("username", loggedInUser.getName());
 					edit.putString("screen_name", loggedInUser.getScreenName());
 					edit.putString("profile_image_url", loggedInUser.getProfileImageUrl());
@@ -71,7 +73,7 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 		Tab tabHome = actionBar.newTab().setText("Home").setTag("HomeTimelineFragment")
 				.setTabListener(this);
 		
-		Tab tabMentions = actionBar.newTab().setText("Mentions").setTag("MentionsTimelineFragment")
+		Tab tabMentions = actionBar.newTab().setText("@ Mentions").setTag("MentionsTimelineFragment")
 				.setTabListener(this);
 		
 		actionBar.addTab(tabHome);
@@ -102,11 +104,12 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 
 	public void onClickComposeMenu(MenuItem miCompose) {
     	Intent i = new Intent(HomeTimelineActivity.this, ComposeNewTweetActivity.class);
-    	startActivityForResult(i, REQUEST_CODE);
+    	startActivityForResult(i, REQUEST_CODE_COMPOSE);
 	}
 	
 	public void onClickProfile(MenuItem miProfile) {
-		
+		Intent i = new Intent(HomeTimelineActivity.this, ProfileActivity.class);
+    	startActivityForResult(i, REQUEST_CODE_PROFILE);	
 	}
 	
 	private void refreshHomeTimeLine() {
@@ -114,7 +117,7 @@ public class HomeTimelineActivity extends FragmentActivity implements TabListene
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data /* return Intent from another activity */) {
-    	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+    	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_COMPOSE) {
     	     // Extract name value from result extras
     	     String operation = data.getExtras().getString("operation");
     	     if ("tweet".equals(operation)) {
