@@ -56,20 +56,8 @@ public class TweetsListFragment extends Fragment {
 		adapter = new TweetsAdapter(getActivity(), tweets);			
 		lvTweets.setAdapter(adapter);
 		
-		lvTweets.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View parent, int position,
-					long rowId) {
-				Tweet tweet = (Tweet)adapter.getItemAtPosition(position);
-				String userId = tweet.getUser().getUserIdStr();
-				if ("".equals(userId)) {
-					Log.d("DEBUG", "user id is empty. there is something wrong. do nothing");
-					return;
-				}
-				listener.onProfileImageSelected(userId);
-			}  	
-		});
+		// delegate this to adapter
+		adapter.addClickListener(listener);		
 	}
 	
 	
