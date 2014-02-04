@@ -18,6 +18,7 @@ public class Tweet extends Model {
 	@Column(name = "User")
     public User user;
 	
+	private static long max_id = Long.MAX_VALUE;
 	private long tweetId;
 	private boolean favorited;
 	private boolean retweeted;
@@ -38,6 +39,10 @@ public class Tweet extends Model {
     public long getTweetId() {
         return tweetId;
     }
+    
+    public static long getMaxID() {
+    	return max_id;
+    }
 
     public boolean isFavorited() {
         return favorited;
@@ -52,6 +57,9 @@ public class Tweet extends Model {
         try {
         	tweet.body = jsonObject.getString("text");
         	tweet.tweetId = jsonObject.getLong("id");
+        	if (tweet.tweetId < max_id) {
+        		max_id = tweet.tweetId;
+        	}
         	tweet.favorited = jsonObject.getBoolean("favorited");
         	tweet.retweeted = jsonObject.getBoolean("retweeted");
             tweet.user = User.fromJson(jsonObject.getJSONObject("user"));

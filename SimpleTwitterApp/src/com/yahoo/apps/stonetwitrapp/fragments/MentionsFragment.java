@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.yahoo.apps.stonetwitrapp.EndlessScrollListener;
 import com.yahoo.apps.stonetwitrapp.MyTwitterApp;
 import com.yahoo.apps.stonetwitrapp.db.Utils;
 import com.yahoo.apps.stonetwitrapp.models.Tweet;
@@ -33,4 +34,16 @@ public class MentionsFragment extends TweetsListFragment {
 			}
 		});
 	}
+	
+	class TweetsListScrollListener extends EndlessScrollListener {   	
+    	@Override
+		public void onLoadMore(int page, int totalItemsCount) {
+			Log.d("DEBUG", "scroll listener calling api for more results");
+			//queryAPIForResults(etQuery.getText().toString(), page * pageSize, optionsQuery, false);				
+		}
+    }
+	
+	public EndlessScrollListener getScrollListener() {
+		 return null;
+	 }
 }

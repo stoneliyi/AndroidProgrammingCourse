@@ -2,23 +2,21 @@ package com.yahoo.apps.stonetwitrapp.fragments;
 
 import java.util.ArrayList;
 
-import com.yahoo.apps.stonetwitrapp.R;
-import com.yahoo.apps.stonetwitrapp.TweetsAdapter;
-import com.yahoo.apps.stonetwitrapp.models.Tweet;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class TweetsListFragment extends Fragment {
+import com.yahoo.apps.stonetwitrapp.EndlessScrollListener;
+import com.yahoo.apps.stonetwitrapp.R;
+import com.yahoo.apps.stonetwitrapp.TweetsAdapter;
+import com.yahoo.apps.stonetwitrapp.models.Tweet;
+
+public abstract class TweetsListFragment extends Fragment {
 
 	private TweetsAdapter adapter;
 	private OnItemSelectedListener listener;
@@ -57,9 +55,13 @@ public class TweetsListFragment extends Fragment {
 		lvTweets.setAdapter(adapter);
 		
 		// delegate this to adapter
-		adapter.addClickListener(listener);		
+		adapter.addClickListener(listener);	
+		
+		lvTweets.setOnScrollListener(getScrollListener());
+	
 	}
 	
+	abstract EndlessScrollListener getScrollListener();
 	
 	public TweetsAdapter getTweetsAdapter() {
 		return adapter;

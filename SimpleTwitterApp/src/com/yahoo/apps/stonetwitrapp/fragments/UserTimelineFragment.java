@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.yahoo.apps.stonetwitrapp.EndlessScrollListener;
 import com.yahoo.apps.stonetwitrapp.MyTwitterApp;
 import com.yahoo.apps.stonetwitrapp.models.Tweet;
 
@@ -45,5 +46,13 @@ public class UserTimelineFragment extends TweetsListFragment {
 			}
 		});
 	}
+
+	@Override
+	EndlessScrollListener getScrollListener() {
+		// not implement yet
+		return null;
+	}
+	
+	
 
 }

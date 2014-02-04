@@ -42,6 +42,16 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("count", "25");
         client.get(apiUrl, params, handler);
     }
+    
+    public void getHomeTimeLine(long maxId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("/statuses/home_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("count", "25");
+        if (maxId != 0) {
+        	params.put("max_id", Long.toString(maxId));
+        }
+        client.get(apiUrl, params, handler);
+    }
 
     
    public void getLogedInUser(AsyncHttpResponseHandler handler) {
@@ -69,6 +79,18 @@ public class TwitterClient extends OAuthBaseClient {
 		RequestParams params = new RequestParams();
         params.put("user_id", userId);
         params.put("count", "25");
+		client.get(apiUrl, params, jsonHttpResponseHandler);
+	}
+	
+	public void getUserTimeLine(String userId, long maxId, JsonHttpResponseHandler jsonHttpResponseHandler) {
+		// /statuses/user_timeline.json 
+		String apiUrl = getApiUrl("/statuses/user_timeline.json");
+		RequestParams params = new RequestParams();
+        params.put("user_id", userId);
+        params.put("count", "25");
+        if (maxId != 0) {
+        	params.put("max_id", Long.toString(maxId));
+        }
 		client.get(apiUrl, params, jsonHttpResponseHandler);
 	}
 	
